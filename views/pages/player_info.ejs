@@ -1,0 +1,142 @@
+<% include ../partials/header %>
+<% include ../partials/menu %>
+	<div class="container">
+		<br>
+		<div class="row">
+			<div class="col-4">
+				<div class="card">
+				<!-- TODO: Modify the ejs code below, to conditionally set the image_src to be from our chosen player -->
+				  <% 
+					if (playerInfo){ var image_src = ''
+						playerInfo.forEach(function(item){
+						image_src+= item.img_src
+						})
+					}
+					else{
+						var image_src = '../resources/img/helmet.jpg';
+					}
+				  %>
+				 <img class="card-img-top" id="player_img" src= "<%- image_src %>" alt="Image of Football Player">
+				  <div class="card-body mx-auto">
+					<form class="form"action="/player_info/post" method="get">
+						<select class="custom-select" name="player_choice" onchange="this.form.submit()">
+							 <option selected>Select Player</option>
+							 <!-- TODO: Populate our select with player options
+							 			For each player, set a new option with a value matching the palyer's id, 
+							 			but will display the player's name-->
+							 <% if (player){
+							    	var playerOption = '';
+							    	player.forEach(function(item){
+									playerOption += '<option value='+item.id+'>'+item.name+'</option>';
+							    	});%>
+							 <%- playerOption %>
+							<%}%>
+						</select>
+					</form>
+				  </div>
+				</div>
+			</div>
+			<div class="col-8">
+				<div class="table-responsive">
+					<table class="table">
+						<tr>
+							<!-- TODO: Set Player Information
+							 			If a player has been selected, fill in their information in each of the fields below.
+							 		    You'll need to calculate here the player's average rushing, receiving, and passing yards.-->
+							<th>Year</th>
+							<td> <% if (playerInfo){
+									var year = ''
+									playerInfo.forEach(function(item){
+									year+= '<td>'+item.year+'</td>'
+									}) %>
+									<%- year%>
+									<%};%>
+							</td>
+						</tr>
+						<tr>
+							<th>Major</th>
+							<td><% if (playerInfo){
+									var major = ''
+									playerInfo.forEach(function(item){
+								   major+= '<td>'+item.major+'</td>'
+									}) %>
+									<%- major%>
+									<%};%>	</td>
+						</tr>
+						<tr>
+							<th>Games Played</th>
+							<td>
+							<% if (gamesPlayed){
+							   var countGames = '<td>'+gamesPlayed+'</td>'%>
+							   <%- countGames%>
+							   <%};%>
+							</td>
+						</tr>
+						<tr>
+							<td>Passing Yards: </td>
+							<% if (playerInfo){
+									var pass = ''
+									playerInfo.forEach(function(item){
+									pass+= '<td>'+item.passing_yards+'</td>';
+									}) %>
+									<%- pass%>
+									<%};%>
+							<td>Avg. Passing Yards: 
+								<% if (playerInfo && gamesPlayed){
+								   avgPass = ''
+								   playerInfo.forEach(function(item){
+								   		var num = item.passing_yards/gamesPlayed
+										avgPass+= num.toFixed(1);
+									}) %>
+									<%- avgPass%>
+								   <%}%>
+							</td>
+						</tr>
+						<tr>
+							<td>Rushing Yards: </td>
+							<% if (playerInfo){
+									var rush = ''
+									playerInfo.forEach(function(item){
+									rush+= '<td>'+item.rushing_yards+'</td>';
+									}) %>
+									<%- rush%>
+									<%};%>
+							<td>Avg. Rushing Yards:
+								<% if (playerInfo && gamesPlayed){
+								   avgRush = ''
+								   playerInfo.forEach(function(item){
+								   		var num = item.rushing_yards/gamesPlayed
+										avgRush+= num.toFixed(1);
+									}) %>
+									<%- avgRush%>
+								   <%}%>
+						</td>
+						</tr>
+						<tr>
+							<td>Receiving Yards: </td>
+							<% if (playerInfo){
+									var receive = ''
+									playerInfo.forEach(function(item){
+									receive+= '<td>'+item.receiving_yards+'</td>'
+									}) %>
+									<%- receive%>
+									<%};%>
+							
+							<td>Avg. Receiving Yards: 
+								<% if (playerInfo && gamesPlayed){
+								   avgRec = ''
+								   playerInfo.forEach(function(item){
+								   		num = item.receiving_yards/gamesPlayed
+										avgRec+= num.toFixed(1);
+									}) %>
+									<%- avgRec%>
+								   <%}%>
+						</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+  
+<% include ../partials/footer %>
